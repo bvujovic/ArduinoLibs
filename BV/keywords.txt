@@ -1,0 +1,14 @@
+BV		KEYWORD1
+Pishti		KEYWORD2
+PishtiSetPin	KEYWORD2
+Vreme		KEYWORD1
+getPocSat	KEYWORD2
+getPocMin	KEYWORD2
+getKrajSat	KEYWORD2
+getKrajMin	KEYWORD2
+UIntervalu	KEYWORD2
+JeVreme		KEYWORD2
+PostaviNovoVreme	KEYWORD2
+PodesiIntervalUnapred	KEYWORD2
+PodesiIntervalUnazad	KEYWORD2
+Println		KEYWORD2
