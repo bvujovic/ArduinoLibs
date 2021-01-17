@@ -19,6 +19,9 @@ public:
     void blink();
     // Blinkanje count puta sa msec parametrom prethodno definisanim u konstruktoru.
     void blink(int count);
+    //todo Umesto ove metode napraviti jednu koja ce uzimati enum/int key i na osnovu recnika/niza definisanog
+    //todo u korisnickom programu, blinkati u trazenom fazonu. Upotreba: led.blink(Blinks::OK);
+    //todo Mozda isto ovo uraditi i za blinkIrregular
     // OK - blink(500, 2)
     void blinkOk() { blink(500, 2); }
     // Warning Minor - blinkIrregular(150, 450, 3)
@@ -30,7 +33,7 @@ public:
     // Paljenje (true) ili gasenje (false) LED diode na pinu koji je prethodno definisan u konstruktoru.
     void ledOn(bool val) { digitalWrite(pin, !(val ^ onValue)); }
 
-    //* blinkAsync/blinkSetup, refresh(ms)
+    //todo blinkAsync/blinkSetup, refresh(ms)
 
     // Kreiranje Blinky objekta za ESP8266 ili ESP32.
     static Blinky &createESP();

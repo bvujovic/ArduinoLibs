@@ -1,5 +1,11 @@
 #include "SleepTimer.h"
 
+SleepTimer::SleepTimer(long coefCorrect)
+{
+    if (!isInitialized())
+        setCoefCorrect(coefCorrect);
+}
+
 SleepTimer::SleepTimer(long wakeEverySec, short netTimeCheck, long coefCorrect)
 {
     if (!isInitialized())
