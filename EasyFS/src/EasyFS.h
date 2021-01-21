@@ -2,12 +2,14 @@
 
 #include <Arduino.h>
 
-#if FS_SPIFFS
-#include <SPIFFS.h>
-#define XFS SPIFFS
-#elif FS_LITTLEFS
+#if FS_LITTLEFS
 #include <LittleFS.h>
 #define XFS LittleFS
+#elif FS_SPIFFS
+#include <SPIFFS.h>
+#define XFS SPIFFS
+#else
+#error FS_LITTLEFS or FS_SPIFFS definition required. e.g. platformio.ini: build_flags = -D FS_SPIFFS
 #endif
 
 // Klasa sa statickim metodama koje rade jednostavno citanje i pisanje sa SPIFFS/LittleFS fajlovima.

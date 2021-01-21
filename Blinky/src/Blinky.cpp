@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Blinky.h"
 
-Blinky::Blinky(int pin, bool onValue, int msec, int count)
+Blinky::Blinky(int pin, bool onValue, ulong msec, ulong count)
 {
     pinMode(this->pin = pin, OUTPUT);
     digitalWrite(pin, !onValue);
@@ -10,10 +10,10 @@ Blinky::Blinky(int pin, bool onValue, int msec, int count)
     this->count = count;
 }
 
-void Blinky::blink(int msec, int count)
+void Blinky::blink(ulong msec, ulong count)
 {
     bool val = onValue;
-    for (int i = 0; i < count * 2 || count == 0; i++)
+    for (ulong i = 0; i < count * 2 || count == 0; i++)
     {
         digitalWrite(pin, val);
         val = !val;
@@ -21,19 +21,9 @@ void Blinky::blink(int msec, int count)
     }
 }
 
-void Blinky::blink(int count)
+void Blinky::blinkIrregular(ulong msOn, ulong msOff, ulong count)
 {
-    blink(this->msec, count);
-}
-
-void Blinky::blink()
-{
-    blink(this->msec, this->count);
-}
-
-void Blinky::blinkIrregular(int msOn, int msOff, int count)
-{
-    for (int i = 0; i < count || count == 0; i++)
+    for (ulong i = 0; i < count || count == 0; i++)
     {
         digitalWrite(pin, onValue);
         delay(msOn);
@@ -42,12 +32,33 @@ void Blinky::blinkIrregular(int msOn, int msOff, int count)
     }
 }
 
-Blinky &Blinky::createESP()
+void Blinky::blinkAsync(ulong ms, ulong msec)
+{
+    digitalWrite(pin, ms % (2 * msec) > msec);
+}
+
+void Blinky::blinkProgress(ulong progress, ulong total, ulong d)
+{
+    ulong p = (100 / d) * progress / total;
+    ledOn(p % 2 == 0);
+}
+
+#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+Blinky &Blinky::create(ulong msec, ulong count)
+{
+    Blinky *led = new Blinky(LED_BUILTIN, true, msec, count);
+    return *led;
+}
+
+#elif (ESP8266) || (ESP32)
+Blinky &Blinky::create(ulong msec, ulong count)
 {
 #ifdef ESP32
-    Blinky *led = new Blinky(33, false);
+    Blinky *led = new Blinky(33, false, msec, count);
 #else
-    Blinky *led = new Blinky(LED_BUILTIN, false);
+    Blinky *led = new Blinky(LED_BUILTIN, false, msec, count);
 #endif
     return *led;
 }
+
+#endif

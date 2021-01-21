@@ -1,3 +1,4 @@
+xcopy c:\Users\bvnet\.platformio\lib\AiThinkerCam\ c:\Users\bvnet\Documents\PlatformIO\Projects\ArduinoLibs\AiThinkerCam\ /S /Y
 xcopy c:\Users\bvnet\.platformio\lib\Blinky\ c:\Users\bvnet\Documents\PlatformIO\Projects\ArduinoLibs\Blinky\ /S /Y
 xcopy c:\Users\bvnet\.platformio\lib\BV\ c:\Users\bvnet\Documents\PlatformIO\Projects\ArduinoLibs\BV\ /S /Y
 xcopy c:\Users\bvnet\.platformio\lib\DataLogger\ c:\Users\bvnet\Documents\PlatformIO\Projects\ArduinoLibs\DataLogger\ /S /Y
