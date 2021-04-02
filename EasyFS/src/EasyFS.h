@@ -20,24 +20,28 @@ private:
     static String fileName;
 
     // Pisanje/dodavanje teksta u fajl.
-    static bool _write(String fileName, String text, const char *mode);
+    static bool _write(const String &fileName, const String &text, const char *mode);
 
 public:
     // Citanje kompletnog tekst fajla sa prosledjenim imenom.
-    static String read(String fileName);
+    static String read(const String &fileName);
     // Citanje kompletnog tekst fajla imena zadatog sa setFileName().
     static String readf() { return read(fileName); }
-    // Pisanje teksta u fajl sa prosledjenim imenom.
-    static bool write(String fileName, String text) { return _write(fileName, text, "w"); }
+    // Pisanje teksta (stari sadrzaj se brise) u fajl sa prosledjenim imenom.
+    static bool write(const String &fileName, const String &text) { return _write(fileName, text, "w"); }
     // Dodavanje teksta u fajl sa prosledjenim imenom.
-    static bool add(String fileName, String text) { return _write(fileName, text, "a"); }
-    // Pisanje teksta u fajl imena zadatog sa setFileName().
-    static bool writef(String text) { return _write(fileName, text, "w"); }
+    static bool add(const String &fileName, const String &text) { return _write(fileName, text, "a"); }
+    // Pisanje teksta (stari sadrzaj se brise) u fajl imena zadatog sa setFileName().
+    static bool writef(const String &text) { return _write(fileName, text, "w"); }
     // Dodavanje teksta u fajl imena zadatog sa setFileName().
-    static bool addf(String text) { return _write(fileName, text, "a"); }
+    static bool addf(const String &text) { return _write(fileName, text, "a"); }
+    // Brisanje sadrzaja fajla sa prosledjenim imenom.
+    static bool clear(const String &fileName);
+    // Brisanje sadrzaja fajla imena zadatog sa setFileName().
+    static bool clearf() { return clear(fileName); }
 
-    // Postavljanje imena fajla koje ce biti korisceno sa readf() i writef();
-    static void setFileName(String fileName) { EasyFS::fileName = fileName; }
+    // Postavljanje imena fajla koje ce biti korisceno sa readf(), addf() i writef();
+    static void setFileName(const String &fileName, bool clearContent = false);
     // Dohvatanje imena fajla koje ce biti korisceno sa readf() i writef();
     static String getFileName() { return fileName; }
 

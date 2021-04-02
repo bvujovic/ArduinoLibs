@@ -18,7 +18,7 @@ void HandleDataFile(WebServ &srv, String path, String mime)
 
 void ConnectToWiFi()
 {
-    Serial.print("\nConnecting to ");
+    Serial.print("Connecting to ");
     Serial.print(WIFI_SSID);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
     int i = 0;
@@ -28,8 +28,8 @@ void ConnectToWiFi()
         Serial.print(".");
     }
     Serial.println();
-    //T Serial.print("\nIP address: ");
-    //T Serial.println(WiFi.localIP());
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
 }
 
 void SetupIPAddress(int ipLastNum)
@@ -53,6 +53,7 @@ void SetupIPAddress(int ipLastNum)
 
 void SendEmptyText(WebServ &srv)
 {
+    //B srv.send(204, "text/plain", "");
     srv.send(200, "text/plain", "");
 }
 

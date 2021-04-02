@@ -12,7 +12,7 @@ private:
     long coefCorrect;
     long coefError;
     long wakeEverySec;     // Na koliko sekundi se aparat budi.
-    short cntNetTimeCheck; // Brojac [0..maxNetTimeCheck]
+    short cntNetTimeCheck; // Brojac budjenja [0..maxNetTimeCheck]
     short maxNetTimeCheck; // Posle koliko budjenja se uzima vreme sa neta radi provere.
     //
     int sleepSeconds(int m, int s, int itv);
@@ -44,7 +44,7 @@ public:
     //
     bool shouldGetNetTime() { return ++cntNetTimeCheck >= maxNetTimeCheck; }
     // Postavljanje broja budjenja posle koliko se uzima vreme sa neta.
-    void setNetTimeCheck(long n) { maxNetTimeCheck = n; }
+    void setNetTimeCheck(long n);
     //
     short getCountNetTimeCheck() { return cntNetTimeCheck + 1; }
     //

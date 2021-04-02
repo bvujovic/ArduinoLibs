@@ -20,20 +20,17 @@ long SleepTimer::getNetTime(tm &t)
 {
     long nowLocal = getLocalTime(t, false);
     ulong ms = millis();
-    sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    char *srvr = new char[30];
-    strcpy(srvr, "rs.pool.ntp.org");
-    sntp_setservername(0, srvr);
-    sntp_init();
     t = {0};
-    const int maxRetires = 5;
+    const int maxRetires = 10;
     long now = 0;
     int i = 0;
-    while (t.tm_year < 2020 && ++i < maxRetires)
+    while (t.tm_year < 120 && ++i < maxRetires)
     {
-        delay(1000);
+        Serial.printf("i=%d, y=%d\n", i, t.tm_year);
+        delay(200);
         now = getLocalTime(t, false);
     }
+    Serial.printf("end: i=%d, y=%d\n", i, t.tm_year);
     if (lastNetTime != 0)
     {
         long prediction = nowLocal + (millis() - ms + 500) / 1000; // +500 je tu zbog zaokruzivanja umesto odsecanja
@@ -46,6 +43,7 @@ long SleepTimer::getNetTime(tm &t)
 
 long SleepTimer::getLocalTime(tm &t, bool correction)
 {
+    configTime(1, 2 * 3600, "rs.pool.ntp.org");
     time_t now;
     time(&now);
     if (coefCorrect != 0 && correction)
@@ -55,14 +53,6 @@ long SleepTimer::getLocalTime(tm &t, bool correction)
         now += d;
     }
     localtime_r(&now, &t);
-    t.tm_year += 1900;
-    t.tm_mon++;
-    t.tm_hour++;
-    if (t.tm_hour == 24)
-    {
-        t.tm_hour = 0;
-        t.tm_mday++;
-    }
     return now;
 }
 
@@ -70,6 +60,13 @@ void SleepTimer::setCoefCorrectIN(long coefCorrect)
 {
     if (!isInitialized())
         setCoefCorrect(coefCorrect);
+}
+
+void SleepTimer::setNetTimeCheck(long n)
+{
+    maxNetTimeCheck = n;
+    if (!isInitialized())
+        cntNetTimeCheck = maxNetTimeCheck;
 }
 
 uint64_t SleepTimer::usecToSleep(tm &t)

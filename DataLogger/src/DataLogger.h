@@ -22,7 +22,7 @@ private:
     int msSaveDelay;                  // Min. interval (u ms) izmedju poslednjeg addSaveDelayed i cuvanja bafera u fajl.
 
 protected:
-    CircularBuffer<T, S> buf;         // Kruzna lista S objekata tipa T.
+    CircularBuffer<T, S> buf; // Kruzna lista S objekata tipa T.
 
 public:
     DataLogger(const char *, void (*saveFunc)(void *, File &) = NULL, bool clearFile = false, int saveDelay = 1000);
@@ -49,6 +49,12 @@ public:
     void addSave(T el, bool clearBuffer = true);
     // Dodavanje stavke u bafer (kruznu listu) uz odlozeno upisivanje (i brisanje) svih stavki u fajl.
     void addSaveDelayed(T el);
+    //
+    void setSaveDelay(int ms)
+    {
+        if (ms >= 0)
+            msSaveDelay = ms;
+    }
     // Poziv ove metode je neophodan u loop-u ako se koristi addSaveDelayed.
     void refresh(ulong ms);
     // Brisanje podataka u fajlu.

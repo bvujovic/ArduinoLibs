@@ -2,6 +2,10 @@
 
 #include <Arduino.h>
 
+#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+typedef unsigned long ulong;
+#endif
+
 // Klasa koja sadrzi metode za blinkanje LED diode ili cega vec.
 class Blinky
 {

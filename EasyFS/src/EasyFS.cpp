@@ -1,7 +1,7 @@
 #include <EasyFS.h>
 #include "FS.h"
 
-String EasyFS::read(String fileName)
+String EasyFS::read(const String &fileName)
 {
   XFS.begin();
   File fp = XFS.open(fileName, "r");
@@ -14,7 +14,7 @@ String EasyFS::read(String fileName)
   return s;
 }
 
-bool EasyFS::_write(String fileName, String text, const char* mode)
+bool EasyFS::_write(const String &fileName, const String &text, const char *mode)
 {
   XFS.begin();
   File fp = XFS.open(fileName, mode);
@@ -26,6 +26,26 @@ bool EasyFS::_write(String fileName, String text, const char* mode)
   }
   else
     return false;
+}
+
+bool EasyFS::clear(const String &fileName)
+{
+  XFS.begin();
+  File fp = XFS.open(fileName, "w");
+  if (fp)
+  {
+    fp.close();
+    return true;
+  }
+  else
+    return false;
+}
+
+void EasyFS::setFileName(const String &fileName, bool clearContent)
+{
+  EasyFS::fileName = fileName;
+  if (clearContent)
+    clearf();
 }
 
 String EasyFS::fileName = "";

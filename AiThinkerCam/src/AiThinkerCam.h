@@ -35,7 +35,7 @@ private:
 
 public:
     // Inicijalizacija kamere.
-    esp_err_t setup(framesize_t size, pixformat_t format);
+    esp_err_t setup(framesize_t size, pixformat_t format = pixformat_t::PIXFORMAT_JPEG);
     // Oslobadjanje memorije posle koriscenja kamere.
     esp_err_t deinit() { return esp_camera_deinit(); }
     // Slikanje.
