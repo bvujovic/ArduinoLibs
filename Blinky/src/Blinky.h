@@ -2,9 +2,10 @@
 
 #include <Arduino.h>
 
-#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+// #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
 typedef unsigned long ulong;
-#endif
+typedef unsigned int uint;
+// #endif
 
 // Klasa koja sadrzi metode za blinkanje LED diode ili cega vec.
 class Blinky
@@ -33,6 +34,11 @@ public:
     void blinkIrregular(ulong msOn, ulong msOff, ulong count);
     // Paljenje (true) ili gasenje (false) LED diode na pinu koji je prethodno definisan u konstruktoru.
     void ledOn(bool val) { digitalWrite(pin, !(val ^ onValue)); }
+    // Paljenje i gasenje LED diode po zadatom paternu. 1. cifra trajanje ON, 2. cifra trajanje OFF, 3 ON...
+    // Samo se cifre racunaju -> "111131" isto kao "11.11.31" ili "11 11 31". "10" -> kratko ON pa OFF bez delay-a.
+    void ledOn(const char *s, ulong msec);
+    void ledOn(const char *s) { ledOn(s, this->msec); }
+    // void ledOn(const String &s);
     // Paljenje LED diode.
     void on() { ledOn(true); }
     // Gasenje LED diode.
@@ -44,6 +50,10 @@ public:
     // Asinhrono blinkanje kao odraz nekog progresa. progress: trenutna vrednost, total: max vrednost,
     // d: koliko % je LED ON, tj. OFF. Jedan blink traje onoliko koliko se vrednost promeni za 2*d.
     void blinkProgress(ulong progress, ulong total, ulong d = 10);
+    // Vrednost/broj pina LED diode.
+    int getPin() { return pin; }
+    // Ispis greske i [beskonacno] blinkovanje.
+    void printBlink(const char* msg, ulong msTotal = 0, ulong msBlink = 0);
 #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
     // Kreiranje Blinky objekta za Arduino.
     static Blinky &create(ulong msec = 500, ulong count = 3);

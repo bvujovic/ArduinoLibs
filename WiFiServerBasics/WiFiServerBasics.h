@@ -26,7 +26,7 @@ typedef WebServer WebServ;
 // https://www.arduino.cc/reference/en/language/functions/communication/stream/streamreadstring/
 
 void HandleDataFile(WebServ &srv, String path, String mime);
-void ConnectToWiFi();
+bool ConnectToWiFi();
 void SetupIPAddress(int ipLastNum);
 void SendEmptyText(WebServ &srv);
 

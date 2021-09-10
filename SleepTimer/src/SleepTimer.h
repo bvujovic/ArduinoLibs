@@ -4,6 +4,11 @@
 #include "time.h"
 #include "lwip/apps/sntp.h"
 
+// Razlika izmedju tekuce godine i broja koji vraca NTP server.
+#define ST_ADD_YEAR (1900)
+// Razlika izmedju tekuceg meseca i broja koji vraca NTP server.
+#define ST_ADD_MON (1)
+
 //
 class SleepTimer
 {
@@ -45,6 +50,7 @@ public:
     bool shouldGetNetTime() { return ++cntNetTimeCheck >= maxNetTimeCheck; }
     // Postavljanje broja budjenja posle koliko se uzima vreme sa neta.
     void setNetTimeCheck(long n);
+    //B void setNetTimeCheck(long n) { maxNetTimeCheck = n; }
     //
     short getCountNetTimeCheck() { return cntNetTimeCheck + 1; }
     //

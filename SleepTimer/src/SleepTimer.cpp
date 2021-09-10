@@ -24,13 +24,13 @@ long SleepTimer::getNetTime(tm &t)
     const int maxRetires = 10;
     long now = 0;
     int i = 0;
-    while (t.tm_year < 120 && ++i < maxRetires)
+    while (t.tm_year < 120 + ST_ADD_YEAR && ++i < maxRetires)
     {
-        Serial.printf("i=%d, y=%d\n", i, t.tm_year);
+        //T Serial.printf("i=%d, y=%d\n", i, t.tm_year);
         delay(200);
         now = getLocalTime(t, false);
     }
-    Serial.printf("end: i=%d, y=%d\n", i, t.tm_year);
+    //T Serial.printf("end: i=%d, y=%d\n", i, t.tm_year);
     if (lastNetTime != 0)
     {
         long prediction = nowLocal + (millis() - ms + 500) / 1000; // +500 je tu zbog zaokruzivanja umesto odsecanja
@@ -53,6 +53,8 @@ long SleepTimer::getLocalTime(tm &t, bool correction)
         now += d;
     }
     localtime_r(&now, &t);
+    t.tm_year += ST_ADD_YEAR;
+    t.tm_mon += ST_ADD_MON;
     return now;
 }
 

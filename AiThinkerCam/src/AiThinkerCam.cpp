@@ -27,7 +27,7 @@ esp_err_t AiThinkerCam::setup(framesize_t size, pixformat_t format)
     if (psramFound())
     {
         config.jpeg_quality = 10;
-        config.fb_count = 2;
+        config.fb_count = 1; //* bilo 2
     }
     else
     {
@@ -37,8 +37,8 @@ esp_err_t AiThinkerCam::setup(framesize_t size, pixformat_t format)
     config.frame_size = size;
 
     // config strong LED (flash)
-    ledcSetup(ledChannel, freq, resolution);
-    ledcAttachPin(pinLed, ledChannel);
+    // ledcSetup(ledChannel, freq, resolution);
+    // ledcAttachPin(pinLed, ledChannel);
 
     return esp_camera_init(&config);
 }

@@ -43,6 +43,55 @@ void Blinky::blinkProgress(ulong progress, ulong total, ulong d)
     ledOn(p % 2 == 0);
 }
 
+void Blinky::ledOn(const char *s, ulong msec)
+{
+    bool isLedOn = true;
+    const char *p = s;
+    while (*p != 0)
+    {
+        byte x = *p - '0';
+        if (x <= 9)
+        {
+            if (x > 0)
+            {
+                ledOn(isLedOn);
+                delay(x * msec);
+            }
+            isLedOn = !isLedOn;
+        }
+        p++;
+    }
+}
+
+void Blinky::printBlink(const char *msg, ulong msTotal, ulong msBlink)
+{
+    Serial.println(msg);
+    if (msBlink == 0)
+        msBlink = this->msec;
+    ulong count = msTotal / msBlink;
+    blink(msBlink, count);
+}
+
+//B
+// void Blinky::ledOn(const String &s)
+// {
+//     uint n = s.length();
+//     Serial.println(n);
+//     bool isLedOn = true;
+//     for (uint i = 0; i < n; i++)
+//     {
+//         char ch = s.charAt(i);
+//         if (ch < '0' || ch > '9')
+//             continue;
+//         ledOn(isLedOn);
+//         Serial.print(isLedOn);
+//         delay((ch - '0') * msec);
+//         Serial.print('\t');
+//         Serial.println((ch - '0') * msec);
+//         isLedOn = !isLedOn;
+//     }
+// }
+
 #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
 Blinky &Blinky::create(ulong msec, ulong count)
 {

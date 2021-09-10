@@ -16,9 +16,9 @@ void HandleDataFile(WebServ &srv, String path, String mime)
         Serial.println(path + " - error reading file.");
 }
 
-void ConnectToWiFi()
+bool ConnectToWiFi()
 {
-    Serial.print("Connecting to ");
+    Serial.print("\r\nConnecting to ");
     Serial.print(WIFI_SSID);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
     int i = 0;
@@ -30,6 +30,7 @@ void ConnectToWiFi()
     Serial.println();
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+    return WiFi.status() == WL_CONNECTED;
 }
 
 void SetupIPAddress(int ipLastNum)
