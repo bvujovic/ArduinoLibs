@@ -7,20 +7,21 @@ typedef unsigned long ulong;
 typedef unsigned int uint;
 // #endif
 
-// Klasa koja sadrzi metode za blinkanje LED diode ili cega vec.
+// Class with methodes for blinking LEDs, maybe turning ON/OFF buzzers...
 class Blinky
 {
 private:
-    int pin;      // Pin na kojem se nalazi LED dioda.
-    bool onValue; // Vrednost koja odgovara upaljenoj LED diodi: HIGH/LOW tj. true/false tj. 1/0.
-    ulong msec;   // Koliko je milisekundi LED dioda ukljucena tj. iskljucena u jednom ciklusu.
-    ulong count;  // Broj ciklusa (blinkova). 0 - beskonacno bliknanje.
+    int pin;      // Pin connected to a LED.
+    bool onValue; // Value that corresponds to the LED being ON. For LED_BUILTIN on ESP boards this value should be false (LOW).
+    ulong msec;   // Duration (milliseconds) of LED turned ON or OFF in one cycle.
+    ulong count;  // How many times LED will blink. 0 for endless blinking.
 
 public:
     Blinky(int pin, bool onValue, ulong msec = 500, ulong count = 3);
-    // LED dioda je msec milisekundi ON, pa msec milisekundi OFF. Ovo se ponavlja count puta ili beskonacno ako je count==0.
+    // LED is turned ON for {msec} milliseconds, then {msec} milliseconds is turned OFF.
+    // This will repeat {count} times or forever if count==0.
     void blink(ulong msec, ulong count);
-    // Blinkanje sa msec i count parametrima prethodno definisanim u konstruktoru.
+    // Blinking using {msec} and {count} values defined in constructor.
     void blink() { blink(this->msec, this->count); }
     // Blinkanje count puta sa msec parametrom prethodno definisanim u konstruktoru.
     void blink(ulong count) { blink(this->msec, count); }
@@ -30,35 +31,38 @@ public:
     void blinkErrorMinor() { blinkIrregular(150, 450, 3); }
     // Error Major - blink(250, 3)
     void blinkErrorMajor() { blink(250, 3); }
-    // Neravnomerno blinkanje. Npr. 500ms ON, 1500ms OFF. count==0 -> beskonacno blinkanje.
+    // E.g. 500ms LED is ON, 1500ms is OFF.
     void blinkIrregular(ulong msOn, ulong msOff, ulong count);
-    // Paljenje (true) ili gasenje (false) LED diode na pinu koji je prethodno definisan u konstruktoru.
+    // Turning the LED ON (val==true) or OFF (val==false). Methods on() or off() can be used for this purpose.
     void ledOn(bool val) { digitalWrite(pin, !(val ^ onValue)); }
-    // Paljenje i gasenje LED diode po zadatom paternu. 1. cifra trajanje ON, 2. cifra trajanje OFF, 3 ON...
-    // Samo se cifre racunaju -> "111131" isto kao "11.11.31" ili "11 11 31". "10" -> kratko ON pa OFF bez delay-a.
+    // Turning the LED ON and OFF using given pattern {s}. 1st digit is ON duration, 2nd is OFF duration, 3rd for ON again...
+    // Only digits are processed -> "111131" is the same as "11.11.31" or "11 11 31". "10" -> short ON then OFF without delay().
     void ledOn(const char *s, ulong msec);
+    // Turning the LED ON and OFF using given pattern {s}. 1st digit is ON duration, 2nd is OFF duration, 3rd for ON again...
+    // Only digits are processed -> "111131" is the same as "11.11.31" or "11 11 31". "10" -> short ON then OFF without delay().
     void ledOn(const char *s) { ledOn(s, this->msec); }
-    // void ledOn(const String &s);
-    // Paljenje LED diode.
+    // Turning the LED ON.
     void on() { ledOn(true); }
-    // Gasenje LED diode.
+    // Turning the LED OFF.
     void off() { ledOn(false); }
-    // Asinhrono/neblokirajuce (bez delay()) blinkanje.
+    // Asynchronous/non-blocking (without delay()) blinking.
     void blinkAsync(ulong ms, ulong msec);
-    // Asinhrono/neblokirajuce (bez delay()) blinkanje. msec definisano u konstruktoru.
+    // Asynchronous/non-blocking (without delay()) blinking. {msec} is set in constructor.
     void blinkAsync(ulong ms) { blinkAsync(ms, this->msec); }
-    // Asinhrono blinkanje kao odraz nekog progresa. progress: trenutna vrednost, total: max vrednost,
-    // d: koliko % je LED ON, tj. OFF. Jedan blink traje onoliko koliko se vrednost promeni za 2*d.
+    // Asynchronous/non-blocking (without delay()) blinking. {msec} and {ms} are set in constructor.
+    void blinkAsync() { blinkAsync(millis(), this->msec); }
+    // Asynchronous blinking that reflect some progress. {progress} - current value, {total} - max value,
+    // d - how many % is LED ON or OFF. One blink lasts for as long as {progress} changes for 2*d.
     void blinkProgress(ulong progress, ulong total, ulong d = 10);
-    // Vrednost/broj pina LED diode.
+    // Get pin number for a LED.
     int getPin() { return pin; }
-    // Ispis greske i [beskonacno] blinkovanje.
-    void printBlink(const char* msg, ulong msTotal = 0, ulong msBlink = 0);
+    // Print {msg} on Serial and then do blinking.
+    void printBlink(const char *msg, ulong msTotal = 0, ulong msBlink = 0);
 #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
-    // Kreiranje Blinky objekta za Arduino.
+    // Creating Blinky object for Arduino board.
     static Blinky &create(ulong msec = 500, ulong count = 3);
 #elif (ESP8266) || (ESP32)
-    // Kreiranje Blinky objekta za ESP8266 ili ESP32.
+    // Creating Blinky object for ESP8266 or ESP32.
     static Blinky &create(ulong msec = 500, ulong count = 3);
 #endif
 };
